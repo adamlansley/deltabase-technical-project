@@ -8,10 +8,8 @@ import {
   CardTitle,
 } from '@/components/ui/card.tsx';
 import { PieChart } from '@/components/charts/pie-chart.tsx';
-
-type ChartTileProps = {
-  tileDefinition: ChartTileDefinition;
-};
+import { useChartDataQuery } from '@/queries/report/useChartDataQuery.ts';
+import { LoadingSpinner } from '@/components/ui/loading-spinner.tsx';
 
 const mapChartDefinitionToComponent = (tile: ChartTileDefinition) => {
   switch (tile.chartType) {
@@ -28,20 +26,57 @@ const mapChartDefinitionToComponent = (tile: ChartTileDefinition) => {
   }
 };
 
+type ChartTileContentProps = {
+  isError: boolean;
+  data: any; // @TODO: This would need to be typed better
+  tileDefinition: ChartTileDefinition;
+};
+
+const ChartTileContent = ({
+  tileDefinition,
+  isError,
+  data,
+}: ChartTileContentProps) => {
+  if (data) {
+    return mapChartDefinitionToComponent(tileDefinition);
+  }
+
+  if (isError) {
+    return 'Error. Unable to load chart';
+  }
+
+  return <LoadingSpinner className="my-16" size="xl" />;
+};
+
+type ChartTileProps = {
+  tileDefinition: ChartTileDefinition;
+};
+
 export const ChartTile = ({ tileDefinition }: ChartTileProps) => {
+  const { isFetching, isLoading, isError, data } = useChartDataQuery(
+    tileDefinition.dataSource,
+  );
+
   return (
     <Card>
-      {(tileDefinition.title || tileDefinition.description) && (
-        <CardHeader>
+      <CardHeader className="flex flex-row justify-between">
+        <div className="flex flex-col gap-2">
           {tileDefinition.title && (
             <CardTitle>{tileDefinition.title}</CardTitle>
           )}
           {tileDefinition.description && (
             <CardDescription>{tileDefinition.description}</CardDescription>
           )}
-        </CardHeader>
-      )}
-      <CardContent>{mapChartDefinitionToComponent(tileDefinition)}</CardContent>
+        </div>
+        {isFetching && !isLoading && <LoadingSpinner size="sm" />}
+      </CardHeader>
+      <CardContent>
+        <ChartTileContent
+          data={data}
+          isError={isError}
+          tileDefinition={tileDefinition}
+        />
+      </CardContent>
     </Card>
   );
 };

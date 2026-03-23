@@ -17,6 +17,7 @@ type AnyChart = BarChartTileDefinition | PieChartTileDefinition;
 
 export type ChartTileDefinition = TileDescriptionDefinition & {
   type: 'chart';
+  dataSource: string;
 } & AnyChart;
 
 export type LayoutTileDefinition = {
@@ -72,12 +73,18 @@ const fetchReport = async (reportId: string) => {
             content:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc volutpat pellentesque ante pulvinar faucibus. Nunc sodales eget libero nec placerat. Sed eu libero quam. Phasellus tincidunt, arcu volutpat pretium imperdiet, neque felis aliquam sem, eget ornare lacus nisl ac arcu. Vivamus nulla neque, tincidunt sed consectetur eget, facilisis eu arcu.',
           },
-          { type: 'chart', chartType: 'bar', title: 'Default Bar Chart' },
+          {
+            type: 'chart',
+            chartType: 'bar',
+            title: 'Default Bar Chart',
+            dataSource: 'bar-chart-data-source',
+          },
           {
             type: 'chart',
             chartType: 'pie',
             title: 'Default Pie Chart',
             description: 'This time with a description',
+            dataSource: 'pie-data-source',
           },
         ],
       });
@@ -96,6 +103,6 @@ export const useSuspenseReportQuery = (reportId: string) => {
 
 export const reportQueryKeys = {
   all: ['report'] as const,
-  ids: () => [...reportQueryKeys.all, 'id'],
-  id: (id: string) => [...reportQueryKeys.ids(), id],
+  ids: () => [...reportQueryKeys.all, 'id'] as const,
+  id: (id: string) => [...reportQueryKeys.ids(), id] as const,
 };
