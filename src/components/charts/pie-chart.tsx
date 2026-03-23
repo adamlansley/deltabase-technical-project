@@ -46,7 +46,7 @@ const chartConfig = {
 
 export const PieChart = () => {
   return (
-    <ChartContainer config={chartConfig} className="mx-auto  max-h-62.5">
+    <ChartContainer config={chartConfig} className="min-h-50 w-full">
       <RechartsPieChart>
         <ChartTooltip
           cursor={false}

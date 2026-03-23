@@ -95,6 +95,9 @@ const fetchReport = async (reportId: string) => {
 export const reportQuery = (reportId: string) => ({
   queryKey: reportQueryKeys.id(reportId),
   queryFn: () => fetchReport(reportId),
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
 });
 
 export const useSuspenseReportQuery = (reportId: string) => {

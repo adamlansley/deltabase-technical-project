@@ -29,7 +29,7 @@ export const ReportContents = ({ tileDefinitions }: ReportContentsProps) => {
   const tiles = useMemo(
     () =>
       tileDefinitions.map((tile) => (
-        <div id={tileTitleToHtmlId(tile.title)}>
+        <div key={tileTitleToHtmlId(tile)} id={tileTitleToHtmlId(tile)}>
           {mapTileDefinitionToComponent(tile)}
         </div>
       )),
