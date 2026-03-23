@@ -1,4 +1,4 @@
-import type { TextualTileDefinition } from '@/queries/report/useReportQuery.ts';
+import type { TextualTileDefinition } from '@/api/report/queries/useReportQuery.ts';
 
 type TextualTileProps = {
   tileDefinition: TextualTileDefinition;

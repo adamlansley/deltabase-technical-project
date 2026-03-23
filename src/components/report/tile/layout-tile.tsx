@@ -1,4 +1,4 @@
-import type { LayoutTileDefinition } from '@/queries/report/useReportQuery.ts';
+import type { LayoutTileDefinition } from '@/api/report/queries/useReportQuery.ts';
 
 type LayoutTileProps = {
   tileDefinition: LayoutTileDefinition;

@@ -1,4 +1,4 @@
-import type { ChartTileDefinition } from '@/queries/report/useReportQuery.ts';
+import type { ChartTileDefinition } from '@/api/report/queries/useReportQuery.ts';
 import { BarChart } from '@/components/charts/bar-chart.tsx';
 import {
   Card,
@@ -11,7 +11,7 @@ import { PieChart } from '@/components/charts/pie-chart.tsx';
 import {
   type ChartData,
   useChartDataQuery,
-} from '@/queries/report/useChartDataQuery.ts';
+} from '@/api/report/queries/useChartDataQuery.ts';
 import { LoadingSpinner } from '@/components/ui/loading-spinner.tsx';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert.tsx';
 import { CircleXIcon, InfoIcon } from 'lucide-react';

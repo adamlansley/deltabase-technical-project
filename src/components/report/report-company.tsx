@@ -1,4 +1,4 @@
-import type { Company } from '@/queries/report/useReportQuery.ts';
+import type { Company } from '@/api/report/queries/useReportQuery.ts';
 
 type ReportCompanyProps = Company;
 

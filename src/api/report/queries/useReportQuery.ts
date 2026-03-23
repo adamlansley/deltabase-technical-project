@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
 type TileDescriptionDefinition = {
   title: string;
@@ -40,7 +40,7 @@ export type ReportOverview = {
   companies: Company[];
 };
 
-type Report = ReportOverview & {
+export type Report = ReportOverview & {
   tileDefinitions: AnyTile[];
 };
 
@@ -92,16 +92,24 @@ const fetchReport = async (reportId: string) => {
   });
 };
 
-export const reportQuery = (reportId: string) => ({
-  queryKey: reportQueryKeys.id(reportId),
-  queryFn: () => fetchReport(reportId),
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  refetchOnMount: false,
-});
+export const reportQuery = <TData = Report>(
+  reportId: string,
+  select?: (data: Report) => TData,
+) =>
+  queryOptions({
+    queryKey: reportQueryKeys.id(reportId),
+    queryFn: () => fetchReport(reportId),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    select,
+  });
 
-export const useSuspenseReportQuery = (reportId: string) => {
-  return useSuspenseQuery(reportQuery(reportId));
+export const useSuspenseReportQuery = <TData = Report>(
+  reportId: string,
+  select?: (data: Report) => TData,
+) => {
+  return useSuspenseQuery(reportQuery(reportId, select));
 };
 
 export const reportQueryKeys = {

@@ -1,13 +1,13 @@
-import type {
-  AnyTile,
-  LayoutTileDefinition,
-} from '@/queries/report/useReportQuery.ts';
+import {
+  type AnyTile,
+  type LayoutTileDefinition,
+  useSuspenseReportQuery,
+} from '@/api/report/queries/useReportQuery.ts';
 import { Card, CardContent } from '@/components/ui/card.tsx';
 import { useMemo } from 'react';
+import { useParams } from '@tanstack/react-router';
 
-type ReportTableOfContentsProps = {
-  tileDefinitions: AnyTile[];
-};
+type ReportTableOfContentsProps = {};
 
 export const tileTitleToHtmlId = (tile: AnyTile) => {
   if (tile.type === 'layout' || !('title' in tile)) {
@@ -23,22 +23,29 @@ export const filterOnlyContentBasedTile = (
   return tile.type !== 'layout';
 };
 
-export const ReportTableOfContents = ({
-  tileDefinitions,
-}: ReportTableOfContentsProps) => {
-  const tilesWithContent = useMemo(
+export const ReportTableOfContents = ({}: ReportTableOfContentsProps) => {
+  const { id } = useParams({ from: '/report/$id' });
+
+  const { data: tileDefinitions } = useSuspenseReportQuery(
+    id,
+    (data) => data.tileDefinitions,
+  );
+
+  const onlyContentTiles = useMemo(
     () => tileDefinitions.filter(filterOnlyContentBasedTile),
     [tileDefinitions],
   );
+
+  const hasContent = onlyContentTiles.length > 0;
 
   return (
     <Card className="basis-xl h-fit sticky top-24">
       <CardContent>
         <nav className="flex flex-col gap-4">
           <h3>Contents</h3>
-          {tileDefinitions.length > 0 && (
+          {hasContent ? (
             <ol className="text-sm">
-              {tilesWithContent.map((tile) => (
+              {onlyContentTiles.map((tile) => (
                 <li
                   key={tileTitleToHtmlId(tile)}
                   className="cursor-pointer py-2"
@@ -47,6 +54,8 @@ export const ReportTableOfContents = ({
                 </li>
               ))}
             </ol>
+          ) : (
+            <span>No content in report</span>
           )}
         </nav>
       </CardContent>
