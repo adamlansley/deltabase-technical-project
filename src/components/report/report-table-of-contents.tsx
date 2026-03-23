@@ -2,7 +2,7 @@ import {
   type AnyTile,
   type LayoutTileDefinition,
 } from '@/api/report/queries/useReportQuery.ts';
-import { Card, CardContent } from '@/components/ui/card.tsx';
+import { Card, CardContent, CardHeader } from '@/components/ui/card.tsx';
 import { useMemo } from 'react';
 import { useReportStore } from '@/stores/report-store.ts';
 
@@ -34,9 +34,11 @@ export const ReportTableOfContents = ({}: ReportTableOfContentsProps) => {
 
   return (
     <Card className="basis-xl h-fit sticky top-24">
-      <CardContent>
+      <CardHeader>
+        <h3>Contents</h3>
+      </CardHeader>
+      <CardContent className="overflow-auto max-h-96">
         <nav className="flex flex-col gap-4">
-          <h3>Contents</h3>
           {hasContent ? (
             <ol className="text-sm">
               {onlyContentTiles.map((tile) => (

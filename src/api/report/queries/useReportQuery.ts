@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { reportQueryKeys } from '@/api/report/keys.ts';
-import { DUMMY_REPORT_DATA } from '@/api/report/dummy-data.ts';
+import { DUMMY_REPORT_DATA } from '@/api/report/dummyData.ts';
 
 type TileDescriptionDefinition = {
   title: string;

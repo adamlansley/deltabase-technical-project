@@ -31,6 +31,10 @@ export function ReportProvider({ children }: ReportProviderProps) {
   );
 
   useEffect(() => {
+    if (hasLoaded) {
+      return;
+    }
+
     setTitle(data.title);
     setDescription(data.description);
     setTileDefinitions(data.tileDefinitions);
