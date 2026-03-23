@@ -1,11 +1,10 @@
 import {
   type AnyTile,
   type LayoutTileDefinition,
-  useSuspenseReportQuery,
 } from '@/api/report/queries/useReportQuery.ts';
 import { Card, CardContent } from '@/components/ui/card.tsx';
 import { useMemo } from 'react';
-import { useParams } from '@tanstack/react-router';
+import { useReportStore } from '@/stores/report-store.ts';
 
 type ReportTableOfContentsProps = {};
 
@@ -24,12 +23,7 @@ export const filterOnlyContentBasedTile = (
 };
 
 export const ReportTableOfContents = ({}: ReportTableOfContentsProps) => {
-  const { id } = useParams({ from: '/report/$id' });
-
-  const { data: tileDefinitions } = useSuspenseReportQuery(
-    id,
-    (data) => data.tileDefinitions,
-  );
+  const tileDefinitions = useReportStore((state) => state.tileDefinitions);
 
   const onlyContentTiles = useMemo(
     () => tileDefinitions.filter(filterOnlyContentBasedTile),

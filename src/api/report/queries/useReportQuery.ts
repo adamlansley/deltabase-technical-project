@@ -1,4 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { reportQueryKeys } from '@/api/report/keys.ts';
+import { DUMMY_REPORT_DATA } from '@/api/report/dummy-data.ts';
 
 type TileDescriptionDefinition = {
   title: string;
@@ -49,46 +51,11 @@ export type Company = {
   imageSrc?: string;
 };
 
-const fetchReport = async (reportId: string) => {
+const fetchReport = async () => {
   return new Promise<Report>((res) => {
     setTimeout(() => {
-      res({
-        title: `Strategy vs Culture Alignment ${reportId}`,
-        description: 'Generated for peer set comparison',
-        companies: [
-          { name: 'Virgin Media O2' },
-          { name: 'Vodafone Group Plc' },
-          { name: 'BT Group' },
-        ],
-        tileDefinitions: [
-          {
-            type: 'textual',
-            title: 'Executive Summary',
-            content:
-              'This Strategy vs Culture Alignment provides comprehensive analysis across 3 companies: Virgin Media O2, Vodafone Group Plc, and BT Group. The report delivers actionable insights through data-driven analysis, enabling strategic decision-making and performance optimisation',
-          },
-          {
-            type: 'textual',
-            title: 'Overview',
-            content:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc volutpat pellentesque ante pulvinar faucibus. Nunc sodales eget libero nec placerat. Sed eu libero quam. Phasellus tincidunt, arcu volutpat pretium imperdiet, neque felis aliquam sem, eget ornare lacus nisl ac arcu. Vivamus nulla neque, tincidunt sed consectetur eget, facilisis eu arcu.',
-          },
-          {
-            type: 'chart',
-            chartType: 'bar',
-            title: 'Default Bar Chart',
-            dataSource: 'bar-chart-data-source',
-          },
-          {
-            type: 'chart',
-            chartType: 'pie',
-            title: 'Default Pie Chart',
-            description: 'This time with a description',
-            dataSource: 'pie-data-source',
-          },
-        ],
-      });
-    }, 3000);
+      res(DUMMY_REPORT_DATA);
+    }, 1500);
   });
 };
 
@@ -98,7 +65,7 @@ export const reportQuery = <TData = Report>(
 ) =>
   queryOptions({
     queryKey: reportQueryKeys.id(reportId),
-    queryFn: () => fetchReport(reportId),
+    queryFn: () => fetchReport(),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
@@ -110,10 +77,4 @@ export const useSuspenseReportQuery = <TData = Report>(
   select?: (data: Report) => TData,
 ) => {
   return useSuspenseQuery(reportQuery(reportId, select));
-};
-
-export const reportQueryKeys = {
-  all: ['report'] as const,
-  ids: () => [...reportQueryKeys.all, 'id'] as const,
-  id: (id: string) => [...reportQueryKeys.ids(), id] as const,
 };

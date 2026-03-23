@@ -1,49 +1,39 @@
-import {
-  type AnyTile,
-  useSuspenseReportQuery,
-} from '@/api/report/queries/useReportQuery.ts';
-import { TextualTile } from '@/components/report/tile/textual-tile.tsx';
-import { ChartTile } from '@/components/report/tile/chart-tile.tsx';
-import { LayoutTile } from '@/components/report/tile/layout-tile.tsx';
 import { useMemo } from 'react';
-import { tileTitleToHtmlId } from '@/components/report/report-table-of-contents.tsx';
-import { useParams } from '@tanstack/react-router';
+import { Tile } from '@/components/report/tile/tile.tsx';
+import { Button } from '@/components/form/button/button.tsx';
+import { CirclePlusIcon } from 'lucide-react';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover.tsx';
+import { ReportAddTile } from '@/components/report/report-add-tile.tsx';
+import { useReportStore } from '@/stores/report-store.ts';
 
 type ReportContentsProps = {};
 
-const mapTileDefinitionToComponent = (tile: AnyTile) => {
-  switch (tile.type) {
-    case 'textual':
-      return <TextualTile tileDefinition={tile} />;
-
-    case 'chart':
-      return <ChartTile tileDefinition={tile} />;
-
-    case 'layout':
-      return <LayoutTile tileDefinition={tile} />;
-
-    default:
-      throw new Error(`Unknown tile type when mapping definition to component`);
-  }
-};
-
 export const ReportContents = ({}: ReportContentsProps) => {
-  const { id } = useParams({ from: '/report/$id' });
-
-  const { data: tileDefinitions } = useSuspenseReportQuery(
-    id,
-    (data) => data.tileDefinitions,
-  );
+  const tileDefinitions = useReportStore((state) => state.tileDefinitions);
 
   const tiles = useMemo(
     () =>
-      tileDefinitions.map((tile) => (
-        <div key={tileTitleToHtmlId(tile)} id={tileTitleToHtmlId(tile)}>
-          {mapTileDefinitionToComponent(tile)}
+      tileDefinitions.map((tile, index) => (
+        <div key={tile.type + index}>
+          <Tile tile={tile} />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="w-full" variant="ghost">
+                <CirclePlusIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <ReportAddTile index={index + 1} />
+            </PopoverContent>
+          </Popover>
         </div>
       )),
     [tileDefinitions],
   );
 
-  return <div className="flex flex-col gap-12">{tiles}</div>;
+  return <div className="flex flex-col gap-4">{tiles}</div>;
 };

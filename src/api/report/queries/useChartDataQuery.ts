@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { chartDataQueryKeys } from '@/api/report/keys.ts';
 
 type ChartStatusSuccess = {
   status: 'success';
@@ -40,11 +41,4 @@ export const chartDataQuery = (dataSource: string) => ({
 
 export const useChartDataQuery = (dataSource: string) => {
   return useQuery(chartDataQuery(dataSource));
-};
-
-export const chartDataQueryKeys = {
-  all: ['chart-data'] as const,
-  sources: () => [...chartDataQueryKeys.all, 'source'] as const,
-  source: (dataSource: string) =>
-    [...chartDataQueryKeys.sources(), dataSource] as const,
 };

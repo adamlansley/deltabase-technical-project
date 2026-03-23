@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import type { AnyTile, Company } from '@/api/report/queries/useReportQuery.ts';
 
 type ReportStoreState = {
+  hasLoaded: boolean;
+  isSaving: boolean;
   title: string;
   description?: string;
   tileDefinitions: AnyTile[];
@@ -9,43 +11,50 @@ type ReportStoreState = {
 };
 
 type ReportStoreActions = {
-  setTitle: (newTitle: ReportStore['title']) => void;
-  setDescription: (newDescription: ReportStore['description']) => void;
-
-  setTileDefinitions: (tiles: AnyTile[]) => void;
-  insertTileDefinition: (tile: AnyTile, index: number) => void;
-  appendTileDefinition: (tile: AnyTile) => void;
-  prependTileDefinition: (tile: AnyTile) => void;
-
-  setCompanies: (tiles: Company[]) => void;
+  setHasLoaded: (hasLoaded: ReportStoreState['hasLoaded']) => void;
+  setIsSaving: (isSaving: ReportStoreState['isSaving']) => void;
+  setTitle: (newTitle: ReportStoreState['title']) => void;
+  setDescription: (newDescription: ReportStoreState['description']) => void;
+  setTileDefinitions: (
+    newTileDefinitions: ReportStoreState['tileDefinitions'],
+  ) => void;
+  insertTileDefinition: (
+    newTileDefinitions: ReportStoreState['tileDefinitions'][number],
+    index: number,
+  ) => void;
+  setCompanies: (newCompanies: ReportStoreState['companies']) => void;
 };
 
 type ReportStore = ReportStoreState & ReportStoreActions;
 
 export const useReportStore = create<ReportStore>()((set) => ({
-  title: 'New Report Title',
-  description: 'New Report Description',
+  hasLoaded: false,
+  isSaving: false,
+  title: '',
+  description: '',
   tileDefinitions: [],
   companies: [],
-  setTitle: (newTitle: ReportStore['title']) => set({ title: newTitle }),
-  setDescription: (newDescription: ReportStore['description']) =>
+
+  setHasLoaded: (hasLoaded: ReportStoreState['hasLoaded']) =>
+    set({ hasLoaded }),
+  setIsSaving: (isSaving: ReportStoreState['isSaving']) => set({ isSaving }),
+  setTitle: (newTitle: ReportStoreState['title']) => set({ title: newTitle }),
+  setDescription: (newDescription: ReportStoreState['description']) =>
     set({ description: newDescription }),
-  setTileDefinitions: (tiles: AnyTile[]) => set({ tileDefinitions: tiles }),
-  insertTileDefinition: (tile: AnyTile, index: number) =>
+  setTileDefinitions: (
+    newTileDefinitions: ReportStoreState['tileDefinitions'],
+  ) => set({ tileDefinitions: newTileDefinitions }),
+  insertTileDefinition: (
+    newTileDefinition: ReportStoreState['tileDefinitions'][number],
+    index: number,
+  ) =>
     set((state) => ({
-      tileDefinitions: state.tileDefinitions.splice(index, 0, tile),
+      tileDefinitions: [
+        ...state.tileDefinitions.slice(0, index),
+        newTileDefinition,
+        ...state.tileDefinitions.slice(index),
+      ],
     })),
-  appendTileDefinition: (tile: AnyTile) =>
-    set((state) => ({
-      tileDefinitions: state.tileDefinitions.splice(
-        state.tileDefinitions.length,
-        0,
-        tile,
-      ),
-    })),
-  prependTileDefinition: (tile: AnyTile) =>
-    set((state) => ({
-      tileDefinitions: state.tileDefinitions.splice(0, 0, tile),
-    })),
-  setCompanies: (newCompanies: Company[]) => set({ companies: newCompanies }),
+  setCompanies: (newCompanies: ReportStoreState['companies']) =>
+    set({ companies: newCompanies }),
 }));
