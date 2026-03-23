@@ -1,11 +1,16 @@
 //  @ts-check
 
 import { tanstackConfig } from '@tanstack/eslint-config';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default [
   ...tanstackConfig,
   {
+    plugins: {
+      'unused-imports': unusedImports,
+    },
     rules: {
+      'unused-imports/no-unused-imports': 'error',
       'import/no-cycle': 'off',
       'import/order': 'off',
       'sort-imports': 'off',
