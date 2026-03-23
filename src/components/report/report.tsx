@@ -8,7 +8,7 @@ export const Report = ({}: ReportProps) => {
   return (
     <section className="flex flex-col flex-wrap gap-8">
       <ReportHeader />
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         <ReportTableOfContents />
         <main>
           <ReportContents />

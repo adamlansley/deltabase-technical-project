@@ -33,12 +33,12 @@ export const ReportTableOfContents = ({}: ReportTableOfContentsProps) => {
   const hasContent = onlyContentTiles.length > 0;
 
   return (
-    <Card className="basis-xl h-fit sticky top-24">
+    <Card className="lg:basis-xl lg:h-fit lg:sticky top-24">
       <CardHeader>
         <h3>Contents</h3>
       </CardHeader>
       <CardContent className="overflow-auto max-h-96">
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col gap-4 ">
           {hasContent ? (
             <ol className="text-sm">
               {onlyContentTiles.map((tile) => (

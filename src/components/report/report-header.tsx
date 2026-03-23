@@ -43,7 +43,7 @@ export const ReportHeader = ({}: ReportHeaderProps) => {
   return (
     <Card>
       <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-row gap-8">
+        <div className="flex flex-col items-center md:flex-row gap-8">
           <Button variant="ghost">
             <ArrowLeftIcon /> <span>Back</span>
           </Button>
@@ -66,7 +66,7 @@ export const ReportHeader = ({}: ReportHeaderProps) => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-row gap-2 text-xs">
+        <div className="flex flex-row gap-2 text-xs mx-auto md:mx-0">
           {companies.map((company) => (
             <ReportCompany
               key={company.name}

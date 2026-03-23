@@ -22,7 +22,7 @@ export const ReportContents = ({}: ReportContentsProps) => {
           <Tile tile={tile} />
           <Popover>
             <PopoverTrigger asChild>
-              <Button className="w-full" variant="ghost">
+              <Button className="w-full mt-4" variant="ghost">
                 <CirclePlusIcon />
               </Button>
             </PopoverTrigger>
